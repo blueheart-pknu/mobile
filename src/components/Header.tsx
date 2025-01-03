@@ -3,6 +3,11 @@ import React from 'react';
 import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../screens/HomeScreen';
+import {WithLocalSvg} from 'react-native-svg';
+
+// Header.tsx 파일 상단에 추가
+import BlueHeartIcon from '../assets/svg/blue-heart-icon.svg';
+// export {default as BlueHeartIcon} from '../assets/svg/blue-heart-icon.svg';
 
 // -------------------- 헤더 --------------------
 export function Header() {
@@ -17,12 +22,14 @@ export function Header() {
       <View style={styles.headerLeft}>
         {/* 로고를 누르면 Home으로 이동하도록 */}
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-          <Image
-            source={{
-              uri: 'https://via.placeholder.com/40/007BFF/FFFFFF?text=Logo',
-            }}
+          {/* <Image
+            // source={{
+            //   uri: 'https://via.placeholder.com/40/007BFF/FFFFFF?text=Logo',
+            // }}
+            source={{BlueHeartIcon}}
             style={styles.logo}
-          />
+          /> */}
+          <BlueHeartIcon width={40} height={40} style={styles.logo} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>BLUE HEART</Text>
       </View>
