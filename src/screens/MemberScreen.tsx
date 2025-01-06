@@ -81,7 +81,6 @@ export default function MemberScreen() {
       {/* <View style={styles.header}>
         <Text style={styles.headerTitle}>BLUE HEART</Text>
       </View> */}
-      <Header />
 
       <View style={styles.contentWrapper}>
         {/* 제목 & 총 멤버 수 */}

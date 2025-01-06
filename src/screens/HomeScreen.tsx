@@ -30,7 +30,7 @@ export type RootStackParamList = {
 function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Header />
+      {/* <Header /> */}
 
       {/* 전체 화면 세로 스크롤 */}
       <ScrollView contentContainerStyle={{paddingVertical: 16}}>

@@ -1,3 +1,4 @@
+// src/components/Header.tsx
 import React, {useRef, useState, useEffect} from 'react';
 import {
   StyleSheet,
@@ -8,7 +9,7 @@ import {
   Animated,
   Easing,
   Modal,
-  TouchableWithoutFeedback, // 바깥 터치 이벤트용
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from '../screens/HomeScreen';
@@ -16,16 +17,20 @@ import {RootStackParamList} from '../screens/HomeScreen';
 import BlueHeartIcon from '../assets/svg/blue-heart-icon.svg';
 import {DropDown} from './Dropdown';
 import Profile from '../assets/png/dummy_1.png';
+import {useSafeAreaInsets} from 'react-native-safe-area-context'; // 추가
 
 export function Header() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
+  // Safe Area insets
+  const insets = useSafeAreaInsets();
+
+  // dropdown 등 기존 로직 그대로
   const [showDropdown, setShowDropdown] = useState(false);
   const [hasNewNotification, setHasNewNotification] = useState(true);
-
   const scaleAnim = useRef(new Animated.Value(1)).current;
 
-  // 아이콘 애니메이션 함수
+  // 아이콘 애니메이션
   const startIconAnimation = () => {
     Animated.sequence([
       Animated.timing(scaleAnim, {
@@ -65,7 +70,12 @@ export function Header() {
   };
 
   return (
-    <View style={styles.headerContainer}>
+    // paddingTop: insets.top을 줘서 상태 표시줄과 겹치지 않게
+    <View
+      style={[
+        styles.headerContainer,
+        {paddingTop: insets.top}, // 추가
+      ]}>
       {/* 로고 부분 */}
       <View style={styles.headerLeft}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
@@ -90,11 +100,7 @@ export function Header() {
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <Image
-            // source={{uri: 'https://via.placeholder.com/40'}}
-            source={Profile}
-            style={styles.profileImage}
-          />
+          <Image source={Profile} style={styles.profileImage} />
         </TouchableOpacity>
       </View>
 
@@ -104,12 +110,10 @@ export function Header() {
         transparent
         animationType="fade"
         onRequestClose={() => setShowDropdown(false)}>
-        {/* 배경(overlay)을 누르면 닫히도록 처리 */}
         <TouchableWithoutFeedback onPress={() => setShowDropdown(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
 
-        {/* 실제 드롭다운(알림 목록) */}
         <View style={styles.dropdownPosition}>
           <DropDown onClose={() => setShowDropdown(false)} />
         </View>
@@ -120,11 +124,13 @@ export function Header() {
 
 const styles = StyleSheet.create({
   headerContainer: {
+    // 기존에 height: 56이라면, insets.top을 추가해줄 수도 있습니다.
+    // 예: height: 56 + insets.top (동적으로 적용하고 싶다면 inline 스타일에서 처리)
+    // 여기서는 height는 빼고 paddingTop만 주는 방식도 괜찮습니다.
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    height: 56,
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
@@ -159,16 +165,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     resizeMode: 'cover',
   },
-  // 모달 배경(overlay)
   modalOverlay: {
     flex: 1,
-    // backgroundColor: 'rgba(0,0,0,0.2)',
   },
-  // 드롭다운 위치
   dropdownPosition: {
     position: 'absolute',
-    top: 118, // 헤더 아래
+    top: 118, // 필요에 맞게 조정
     right: 4,
-    // backgroundColor: '#FFF',
   },
 });
