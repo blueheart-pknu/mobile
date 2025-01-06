@@ -10,8 +10,9 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {Header} from '../components/Header';
+import {ActivityCard} from '../components/ActivityCard';
+import {activityData} from '../constants/dummy';
 
 // 화면 전체 너비
 const {width} = Dimensions.get('window');
@@ -24,68 +25,6 @@ export type RootStackParamList = {
   Member: undefined;
   // 다른 화면들을 여기에 추가
 };
-
-// -------------------- 카드 컴포넌트 --------------------
-function ActivityCard({
-  title,
-  dateText,
-  progressRatio,
-  maxParticipants,
-  currentParticipants,
-  statusText,
-  imageUrl,
-}: {
-  title: string;
-  dateText: string;
-  progressRatio: number; // 0~1 사이
-  maxParticipants: number;
-  currentParticipants: number;
-  statusText?: string;
-  imageUrl: string;
-}) {
-  // 홈 화면에서 카드 클릭 시 이동 가능하도록
-  //   const navigation = useNavigation();
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
-  return (
-    <View style={styles.cardContainer}>
-      {/* 상단 이미지 */}
-      <Image source={{uri: imageUrl}} style={styles.cardImage} />
-
-      {/* 활동 정보 */}
-      <View style={styles.cardContent}>
-        <Text style={styles.cardTitle}>{title}</Text>
-        <Text style={styles.cardSubTitle}>{dateText}</Text>
-
-        {/* 간단한 Progress Bar */}
-        <View style={styles.progressBarContainer}>
-          <View
-            style={[
-              styles.progressBarFill,
-              {
-                width: `${(progressRatio * 100).toFixed(
-                  0,
-                )}%` as unknown as number,
-              },
-            ]}
-          />
-        </View>
-        <Text style={styles.participantsText}>
-          {currentParticipants}/{maxParticipants}
-        </Text>
-
-        {/* 참여 상태 버튼 (Optional) -> 누르면 상세 화면으로 이동 */}
-        {statusText ? (
-          <TouchableOpacity
-            style={styles.participateButton}
-            onPress={() => navigation.navigate('Topic')}>
-            <Text style={styles.participateButtonText}>{statusText}</Text>
-          </TouchableOpacity>
-        ) : null}
-      </View>
-    </View>
-  );
-}
 
 // -------------------- 홈 화면 --------------------
 function HomeScreen() {
@@ -105,24 +44,19 @@ function HomeScreen() {
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.horizontalCardScroll}>
-          <ActivityCard
-            title="Debate Club Meeting"
-            dateText="Today, 3:00 PM"
-            progressRatio={0.25}
-            maxParticipants={20}
-            currentParticipants={5}
-            statusText="Participating"
-            imageUrl="https://via.placeholder.com/400x200?text=Debate+Club+Image"
-          />
-          <ActivityCard
-            title="Music Club Practice"
-            dateText="Tomorrow, 5:00 PM"
-            progressRatio={0.1}
-            maxParticipants={10}
-            currentParticipants={1}
-            statusText=""
-            imageUrl="https://via.placeholder.com/400x200?text=Music+Club+Image"
-          />
+          {activityData.map((activity, index) => (
+            <ActivityCard
+              key={index}
+              title={activity.title}
+              dateText={activity.dateText}
+              progressRatio={activity.progressRatio}
+              maxParticipants={activity.maxParticipants}
+              currentParticipants={activity.currentParticipants}
+              statusText={activity.statusText}
+              imageUrl={activity.imageUrl}
+              location={activity.location}
+            />
+          ))}
         </ScrollView>
 
         {/* 지난 활동들 */}
@@ -134,23 +68,19 @@ function HomeScreen() {
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.horizontalCardScroll}>
-          <ActivityCard
-            title="Debate Club Meeting"
-            dateText="Today, 3:00 PM"
-            progressRatio={1.0}
-            maxParticipants={20}
-            currentParticipants={20}
-            statusText="Participating"
-            imageUrl="https://via.placeholder.com/400x200?text=Debate+Club+Image"
-          />
-          <ActivityCard
-            title="Music Club Practice"
-            dateText="어제, 5:00 PM"
-            progressRatio={1.0}
-            maxParticipants={10}
-            currentParticipants={10}
-            imageUrl="https://via.placeholder.com/400x200?text=Music+Club+Image"
-          />
+          {activityData.map((activity, index) => (
+            <ActivityCard
+              key={index}
+              title={activity.title}
+              dateText={activity.dateText}
+              progressRatio={activity.progressRatio}
+              maxParticipants={activity.maxParticipants}
+              currentParticipants={activity.currentParticipants}
+              statusText={activity.statusText}
+              imageUrl={activity.imageUrl}
+              location={activity.location}
+            />
+          ))}
         </ScrollView>
       </ScrollView>
     </SafeAreaView>
@@ -211,66 +141,6 @@ const styles = StyleSheet.create({
   horizontalCardScroll: {
     paddingHorizontal: 10,
     marginBottom: 16,
-  },
-
-  // 카드 스타일
-  cardContainer: {
-    width: 280,
-    backgroundColor: '#fff',
-    marginRight: 16,
-    borderRadius: 8,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.2,
-    elevation: 2,
-  },
-  cardImage: {
-    width: '100%',
-    height: 140,
-    resizeMode: 'cover',
-  },
-  cardContent: {
-    padding: 12,
-  },
-  cardTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  cardSubTitle: {
-    fontSize: 14,
-    color: '#888',
-    marginBottom: 8,
-  },
-  progressBarContainer: {
-    width: '100%',
-    height: 6,
-    backgroundColor: '#E0E0E0',
-    borderRadius: 3,
-    marginBottom: 4,
-  },
-  progressBarFill: {
-    height: '100%',
-    backgroundColor: '#3B82F6',
-    borderRadius: 3,
-  },
-  participantsText: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 8,
-  },
-  participateButton: {
-    backgroundColor: '#3B82F6',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 4,
-    alignSelf: 'flex-start',
-  },
-  participateButtonText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
   },
 
   // 섹션 타이틀 스타일
