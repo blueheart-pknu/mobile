@@ -11,12 +11,12 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
 } from 'react-native';
-import {Header} from '../components/Header';
 import {ACTIVITIES_DATA, GROUP_MEMBERS} from '../constants/dummy';
 import DateIcon from '../assets/svg/calender-icon.svg';
 import PeopleIcon from '../assets/svg/people-icon.svg';
 import LinkIcon from '../assets/svg/link-icon.svg';
 import PeoplesIcon from '../assets/svg/peoples-icon.svg';
+import DefaultIcon from '../assets/svg/default-icon.svg';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from './HomeScreen';
 
@@ -113,10 +113,11 @@ const ProfileScreen = () => {
     return (
       <View key={member.id} style={styles.memberContainer}>
         {/* <View style={styles.memberAvatar} /> */}
-        <Image
+        <DefaultIcon width={50} height={50} style={styles.memberAvatar} />
+        {/* <Image
           source={{uri: 'https://picsum.photos/200'}}
           style={styles.memberAvatar}
-        />
+        /> */}
 
         <Text style={styles.memberName}>{member.name}</Text>
         {member.phone && <Text style={styles.memberPhone}>{member.phone}</Text>}
@@ -380,9 +381,9 @@ const styles = StyleSheet.create({
   memberAvatar: {
     width: 50,
     height: 50,
-    backgroundColor: '#666',
+    // backgroundColor: '#666',
     borderRadius: 25,
-    marginBottom: 4,
+    marginBottom: 6,
   },
   memberName: {
     fontSize: 14,
