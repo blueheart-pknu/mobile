@@ -370,7 +370,7 @@
 //   },
 // });
 
-import React, {useRef, useState} from 'react';
+import React, {act, useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -383,6 +383,10 @@ import {
 } from 'react-native';
 import {Header} from '../components/Header';
 import {ACTIVITIES_DATA, GROUP_MEMBERS} from '../constants/dummy';
+import DateIcon from '../assets/svg/calender-icon.svg';
+import PeopleIcon from '../assets/svg/people-icon.svg';
+import LinkIcon from '../assets/svg/link-icon.svg';
+import PeoplesIcon from '../assets/svg/peoples-icon.svg';
 
 function QuickActions() {
   return (
@@ -391,23 +395,14 @@ function QuickActions() {
       <View style={styles.quickActionsRow}>
         {/* View Members */}
         <TouchableOpacity style={styles.actionCard} onPress={() => {}}>
-          <Image
-            source={{
-              uri: 'https://img.icons8.com/ios-filled/50/000000/conference-call.png',
-            }}
-            style={styles.actionIcon}
-          />
+          <PeoplesIcon width={40} height={45} />
           <Text style={styles.actionText}>View Members</Text>
         </TouchableOpacity>
 
         {/* Send Auth Links */}
         <TouchableOpacity style={styles.actionCard} onPress={() => {}}>
-          <Image
-            source={{
-              uri: 'https://img.icons8.com/external-becris-lineal-becris/64/000000/external-link-mintab-for-ios-becris-lineal-becris.png',
-            }}
-            style={styles.actionIcon}
-          />
+          <LinkIcon width={40} height={45} />
+
           <Text style={styles.actionText}>Send Auth Links</Text>
         </TouchableOpacity>
       </View>
@@ -434,14 +429,18 @@ const ProfileScreen = () => {
     return (
       <View style={styles.activityCardContainer}>
         <View style={styles.activityCard}>
-          <Text style={styles.activityTitle}>{item.title}</Text>
-          <Text style={styles.activityStatus}>{item.status}</Text>
-          <View style={styles.activityInfoRow}>
-            <Text style={styles.activityLabel}>📅 {item.date}</Text>
+          <View style={styles.activityTitleContainer}>
+            <Text style={styles.activityTitle}>{item.title}</Text>
+            <Text style={styles.activityStatus}>{item.status}</Text>
           </View>
           <View style={styles.activityInfoRow}>
+            <DateIcon width={16} height={16} />
+            <Text style={styles.activityLabel}> {item.date}</Text>
+          </View>
+          <View style={styles.activityInfoRow}>
+            <PeopleIcon width={16} height={16} />
             <Text style={styles.activityLabel}>
-              👥 {item.participants} Participants
+              {item.participants} Participants
             </Text>
           </View>
           <View style={styles.activityButtonsRow}>
@@ -470,9 +469,6 @@ const ProfileScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* 상단 헤더 영역 */}
-
-      {/* Quick Actions */}
       <QuickActions />
 
       {/* Activities Title + Create 버튼 */}
@@ -486,7 +482,7 @@ const ProfileScreen = () => {
       {/* 가로 스크롤(페이지 단위)로 Activity들 표시 */}
       <View style={{height: 200}}>
         <FlatList
-          ref={flatListRef}
+          // ref={flatListRef}
           data={ACTIVITIES_DATA}
           keyExtractor={item => item.id}
           renderItem={renderActivityItem}
@@ -494,6 +490,7 @@ const ProfileScreen = () => {
           pagingEnabled
           onScroll={onScroll}
           showsHorizontalScrollIndicator={false}
+          // contentContainerStyle={{paddingHorizontal: 16}}
         />
       </View>
 
@@ -537,7 +534,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F7F8FA',
     paddingTop: 40,
-    // marginHorizontal: 16,
+    marginHorizontal: 16,
+    // paddingHorizontal: 16,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -584,12 +582,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
     marginBottom: 8,
   },
   sectionTitle: {
     fontSize: 16,
     fontWeight: '600',
+    marginBottom: 16,
   },
   createButton: {
     backgroundColor: '#000',
@@ -602,9 +601,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   activityCardContainer: {
-    width, // 페이지 단위로 딱 맞게
+    // width, // 페이지 단위로 딱 맞게
+    width: width - 32, // 16px 패딩 * 2
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  activityTitleContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+    // marginHorizontal
   },
   activityCard: {
     width: width * 0.9,
@@ -627,13 +635,13 @@ const styles = StyleSheet.create({
     color: '#1B5E20',
     fontSize: 12,
     paddingHorizontal: 8,
-    paddingVertical: 2,
+    paddingVertical: 6,
     borderRadius: 4,
-    marginBottom: 8,
   },
   activityInfoRow: {
     flexDirection: 'row',
     marginBottom: 4,
+    gap: 4,
   },
   activityLabel: {
     fontSize: 14,
@@ -644,7 +652,8 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   editButton: {
-    backgroundColor: '#ddd',
+    // backgroundColor: '#ddd',
+    borderWidth: 1,
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
@@ -655,7 +664,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   koreanButton: {
-    backgroundColor: '#98CFFF',
+    // backgroundColor: '#98CFFF',
+    borderWidth: 1,
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
@@ -679,7 +689,7 @@ const styles = StyleSheet.create({
   },
   groupContainer: {
     flex: 1,
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
     marginBottom: 16,
   },
   groupHeader: {
@@ -693,6 +703,10 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     paddingVertical: 6,
     paddingHorizontal: 12,
+
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   editButtonBlackText: {
     color: '#fff',

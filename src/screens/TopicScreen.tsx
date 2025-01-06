@@ -10,10 +10,9 @@ import {
   Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Header} from '../components/Header';
 import {ProgressBar} from '../components/ProgressBar';
 import LocationIcon from '../assets/svg/location-icon.svg';
-import DateIcon from '../assets/svg/Calender-icon.svg';
+import DateIcon from '../assets/svg/calender-icon.svg';
 
 function TopicScreen() {
   const navigation = useNavigation();
