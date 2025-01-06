@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -7,43 +7,35 @@ import {
   ScrollView,
 } from 'react-native';
 
-// 알림 예시 데이터
 const dummyNotifications = [
   {
     id: 1,
     message: '누군가 당신의 게시글에 댓글을 달았습니다.',
-    timestamp: new Date(new Date().getTime() - 1000 * 60 * 10), // 10분 전
+    timestamp: new Date(new Date().getTime() - 1000 * 60 * 10),
   },
   {
     id: 2,
     message: '새로운 이벤트가 시작되었습니다!',
-    timestamp: new Date(new Date().getTime() - 1000 * 60 * 60), // 1시간 전
+    timestamp: new Date(new Date().getTime() - 1000 * 60 * 60),
   },
   {
     id: 3,
     message: '메시지를 확인해주세요.',
-    timestamp: new Date(new Date().getTime() - 1000 * 60 * 3), // 3분 전
+    timestamp: new Date(new Date().getTime() - 1000 * 60 * 3),
   },
 ];
 
-// "얼마나 지났는지" 텍스트 계산 함수
 function getTimeAgoText(date: Date) {
   const now = new Date();
-  const diff = now.getTime() - date.getTime(); // ms 단위 차이
-
+  const diff = now.getTime() - date.getTime();
   const minutes = Math.floor(diff / 1000 / 60);
   const hours = Math.floor(minutes / 60);
   const days = Math.floor(hours / 24);
 
-  if (days > 0) {
-    return `${days}일 전`;
-  } else if (hours > 0) {
-    return `${hours}시간 전`;
-  } else if (minutes > 0) {
-    return `${minutes}분 전`;
-  } else {
-    return '방금 전';
-  }
+  if (days > 0) return `${days}일 전`;
+  if (hours > 0) return `${hours}시간 전`;
+  if (minutes > 0) return `${minutes}분 전`;
+  return '방금 전';
 }
 
 type NotificationsDropdownProps = {
@@ -52,27 +44,40 @@ type NotificationsDropdownProps = {
 };
 
 export function DropDown({style, onClose}: NotificationsDropdownProps) {
-  // 최근순 정렬 (timestamp가 최신인 알림이 위로)
-  const sortedNotifications = [...dummyNotifications].sort((a, b) => {
-    return b.timestamp.getTime() - a.timestamp.getTime();
-  });
+  const sortedNotifications = [...dummyNotifications].sort(
+    (a, b) => b.timestamp.getTime() - a.timestamp.getTime(),
+  );
+
+  // hover 상태를 알림 ID별로 관리 (web 전용)
+  const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   return (
     <View style={[styles.container, style]}>
-      {/* 닫기 버튼이 필요하다면 넣기 */}
-      <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+      {/* <TouchableOpacity style={styles.closeButton} onPress={onClose}>
         <Text style={{color: '#999'}}>닫기</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <ScrollView>
-        {sortedNotifications.map(notification => (
-          <View key={notification.id} style={styles.notificationItem}>
-            <Text style={styles.messageText}>{notification.message}</Text>
-            <Text style={styles.timeText}>
-              {getTimeAgoText(notification.timestamp)}
-            </Text>
-          </View>
-        ))}
+        {sortedNotifications.map(notification => {
+          const isHovered = hoveredId === notification.id;
+
+          return (
+            <View
+              key={notification.id}
+              //   // onMouseEnter / onMouseLeave는 웹에서만 동작
+              //   onMouseEnter={() => setHoveredId(notification.id)}
+              //   onMouseLeave={() => setHoveredId(null)}
+              style={[
+                styles.notificationItem,
+                isHovered && styles.notificationItemHover, // hover 시 스타일 적용
+              ]}>
+              <Text style={styles.messageText}>{notification.message}</Text>
+              <Text style={styles.timeText}>
+                {getTimeAgoText(notification.timestamp)}
+              </Text>
+            </View>
+          );
+        })}
       </ScrollView>
     </View>
   );
@@ -83,6 +88,10 @@ const styles = StyleSheet.create({
     maxHeight: 300,
     paddingVertical: 8,
     zIndex: 1,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#DDD',
   },
   closeButton: {
     alignSelf: 'flex-end',
@@ -94,6 +103,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderBottomColor: '#EEE',
     borderBottomWidth: 1,
+  },
+  // Hover 시 적용할 스타일
+  notificationItemHover: {
+    backgroundColor: '#f2f2f2',
   },
   messageText: {
     fontSize: 14,
