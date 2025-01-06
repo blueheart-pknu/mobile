@@ -43,7 +43,7 @@ export function ActivityCard({
             <Text style={styles.cardSubTitle}>{dateText}</Text>
             <Text style={styles.cardSubTitle}>{location}</Text>
           </View>
-          <CircleChart percentage={12} />
+          <CircleChart percentage={50} />
         </View>
         <>
           {/* 간단한 Progress Bar */}

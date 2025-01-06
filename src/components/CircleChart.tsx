@@ -2,13 +2,13 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 
-export function CircleChart({percentage = 20}) {
+export function CircleChart({percentage}: {percentage: number}) {
   return (
     <View style={styles.container}>
       <CircularProgress
         value={percentage}
         radius={20} // 원 크기
-        maxValue={20}
+        maxValue={100}
         // title={`${percentage}%`}
         titleStyle={styles.percentageText}
         activeStrokeWidth={5}
