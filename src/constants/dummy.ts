@@ -46,3 +46,56 @@ export const activityData = [
     location: 'Room 104',
   },
 ];
+
+// 더미 Activity 데이터
+export const ACTIVITIES_DATA = [
+  {
+    id: '1',
+    title: 'Weekend Hiking',
+    date: 'Sep 15, 2024',
+    participants: 12,
+    status: 'Active',
+  },
+  {
+    id: '2',
+    title: 'Beach Cleanup',
+    date: 'Oct 03, 2024',
+    participants: 8,
+    status: 'Active',
+  },
+  {
+    id: '3',
+    title: 'Community Service',
+    date: 'Nov 12, 2024',
+    participants: 10,
+    status: 'Active',
+  },
+  {
+    id: '4',
+    title: 'Charity Marathon',
+    date: 'Dec 20, 2024',
+    participants: 20,
+    status: 'Active',
+  },
+  {
+    id: '5',
+    title: 'Christmas Party',
+    date: 'Dec 25, 2024',
+    participants: 15,
+    status: 'Active',
+  },
+];
+
+// 더미 멤버 목록
+export const GROUP_MEMBERS = [
+  {id: '1', name: 'hyowchoi', phone: '123456789'},
+  {id: '2', name: 'daewoole'},
+  {id: '3', name: 'dongglee'},
+  {id: '4', name: 'eunbikim'},
+  {id: '5', name: 'gykoh'},
+  {id: '6', name: 'hyungnoh'},
+  {id: '7', name: 'inshin'},
+  {id: '8', name: 'jeekim'},
+  {id: '9', name: 'jihykim2'},
+  {id: '10', name: 'jimchoi'},
+];

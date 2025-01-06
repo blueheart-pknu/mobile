@@ -21,7 +21,6 @@ function TopicScreen() {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F5F5F5'}}>
-      <Header />
       {/* <View style={styles.headerPlaceholder}></View> */}
 
       <ScrollView contentContainerStyle={styles.contentContainer}>

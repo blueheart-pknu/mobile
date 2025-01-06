@@ -55,7 +55,7 @@ export default function RegisterScreen() {
   return (
     <SafeAreaView style={styles.container}>
       {/* 상단 헤더 (Back 버튼 + 제목) */}
-      <Header />
+
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
