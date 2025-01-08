@@ -1,24 +1,37 @@
-// import {View} from 'react-native-reanimated/lib/typescript/Animated';
+import React from 'react';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {Member} from '../screens/ProfileScreen';
 import DefaultIcon from '../assets/svg/default-icon.svg';
-import {StyleSheet, Text, View} from 'react-native';
-// import {Text} from 'react-native-svg';
 
 // 멤버 목록 렌더
-export const renderMemberItem = (member: Member) => {
-  return (
-    <View key={member.id} style={styles.memberContainer}>
-      {/* <View style={styles.memberAvatar} /> */}
+export const renderMemberItem = (
+  member: Member,
+  onPress?: (member: Member) => void,
+) => {
+  const content = (
+    <>
       <DefaultIcon width={50} height={50} style={styles.memberAvatar} />
-      {/* <Image
-          source={{uri: 'https://picsum.photos/200'}}
-          style={styles.memberAvatar}
-        /> */}
-
       <Text style={styles.memberName}>{member.name}</Text>
       {member.phone && <Text style={styles.memberPhone}>{member.phone}</Text>}
-    </View>
+    </>
   );
+
+  if (onPress) {
+    return (
+      <TouchableOpacity
+        key={member.id}
+        style={styles.memberContainer}
+        onPress={() => onPress(member)}>
+        {content}
+      </TouchableOpacity>
+    );
+  } else {
+    return (
+      <View key={member.id} style={styles.memberContainer}>
+        {content}
+      </View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -30,7 +43,6 @@ const styles = StyleSheet.create({
   memberAvatar: {
     width: 50,
     height: 50,
-    // backgroundColor: '#666',
     borderRadius: 25,
     marginBottom: 6,
   },

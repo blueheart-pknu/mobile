@@ -10,6 +10,8 @@ import {
   ScrollView,
   TouchableWithoutFeedback, // react-native에서 임포트
 } from 'react-native';
+import {renderMemberItem} from '../components/MemberUI';
+import {GROUP_MEMBERS} from '../constants/dummy';
 
 export default function ActivityMembersScreen() {
   // 검색어 상태
@@ -90,33 +92,21 @@ export default function ActivityMembersScreen() {
 
         <ScrollView>
           {/* Join Member 섹션 */}
-          <Text style={styles.sectionTitle}>Join Member</Text>
+          <View style={styles.membersContainer}>
+            <Text style={styles.sectionTitle}>Join Member</Text>
 
-          <View style={styles.memberContainer}>
-            {filterMembers(joinMembers).map((member, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.memberBox}
-                onPress={() => onMemberPress(member)}>
-                <Text style={styles.memberText}>
-                  {member.name} {member.id ? member.id : ''}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            <View style={styles.membersGrid}>
+              {GROUP_MEMBERS.map(member =>
+                renderMemberItem(member, onMemberPress),
+              )}
+            </View>
           </View>
 
-          {/* 두 번째 섹션 (예시) */}
-          <View style={styles.memberContainer}>
-            {filterMembers(otherMembers).map((member, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.memberBox}
-                onPress={() => onMemberPress(member)}>
-                <Text style={styles.memberText}>
-                  {member.name} {member.id ? member.id : ''}
-                </Text>
-              </TouchableOpacity>
-            ))}
+          <View style={styles.membersContainer}>
+            <Text style={styles.sectionTitle}>Members</Text>
+            <View style={styles.membersGrid}>
+              {GROUP_MEMBERS.map(member => renderMemberItem(member))}
+            </View>
           </View>
         </ScrollView>
       </View>
@@ -188,6 +178,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 24,
+    // borderWidth: 1,s
   },
   memberBox: {
     width: '30%',
@@ -258,4 +249,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
     textDecorationLine: 'underline',
   },
+  membersGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEE',
+  },
+  membersContainer: {marginTop: 16},
 });
