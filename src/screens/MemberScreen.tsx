@@ -1,223 +1,261 @@
 import React, {useState} from 'react';
 import {
-  SafeAreaView,
   View,
   Text,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
-  Dimensions,
+  Modal,
+  SafeAreaView,
+  ScrollView,
+  TouchableWithoutFeedback, // react-native에서 임포트
 } from 'react-native';
-import {Header} from '../components/Header';
 
-// 화면 너비
-const {width} = Dimensions.get('window');
-
-// 멤버 데이터 타입
-type Member = {
-  id: string;
-  name: string;
-  phone?: string;
-};
-
-// 더미 데이터
-const initialMembers: Member[] = [
-  {id: '1', name: 'hyowchoi', phone: '123456789'},
-  {id: '2', name: 'daewoole'},
-  {id: '3', name: 'dongglee'},
-  {id: '4', name: 'eunbikim'},
-  {id: '5', name: 'gykoh'},
-  {id: '6', name: 'hyungnoh'},
-  {id: '7', name: 'inshin'},
-  {id: '8', name: 'jeekim'},
-  {id: '9', name: 'jihykim2'},
-  {id: '10', name: 'jimchoi'},
-];
-
-export default function MemberScreen() {
+export default function ActivityMembersScreen() {
+  // 검색어 상태
   const [searchText, setSearchText] = useState('');
-  const [selectedMemberIds, setSelectedMemberIds] = useState<string[]>([]);
 
-  // 멤버 목록 필터
-  const filteredMembers = initialMembers.filter(member =>
-    member.name.toLowerCase().includes(searchText.toLowerCase()),
-  );
+  // 모달 제어 상태
+  const [modalVisible, setModalVisible] = useState(false);
+  // 현재 선택된 멤버 정보
+  const [selectedMember, setSelectedMember] = useState(null);
 
-  // 멤버 선택/해제
-  const toggleSelect = (id: string) => {
-    if (selectedMemberIds.includes(id)) {
-      setSelectedMemberIds(selectedMemberIds.filter(item => item !== id));
-    } else {
-      setSelectedMemberIds([...selectedMemberIds, id]);
-    }
-  };
+  // 예시 멤버 데이터 (Join Member)
+  const joinMembers = [
+    {name: 'hyowchoi', id: '123456789'},
+    {name: 'daewoole'},
+    {name: 'dongglee'},
+    {name: 'eunbikim'},
+    {name: 'gykoh'},
+    {name: 'hyungnoh'},
+    {name: 'inshin'},
+    {name: 'jeekim'},
+    {name: 'jihykim2'},
+    {name: 'jimchoi'},
+  ];
 
-  // Confirm Selection
-  const handleConfirmSelection = () => {
-    // 실제로는 선택된 멤버 정보를 서버로 전송하거나 다른 화면으로 넘기기 등
-    console.log('Selected Member IDs:', selectedMemberIds);
-    // alert(`Selected IDs: ${selectedMemberIds.join(', ')}`);
-  };
+  // 예시 멤버 데이터 (하단 섹션)
+  const otherMembers = [
+    {name: 'test1', id: '123456789'},
+    {name: 'test2'},
+    {name: 'test3'},
+    {name: 'test4'},
+    {name: 'test5'},
+    {name: 'test6'},
+    {name: 'test7'},
+    {name: 'test8'},
+  ];
 
-  // 각 멤버를 렌더링할 카드
-  const renderMemberCard = ({item}: {item: Member}) => {
-    const isSelected = selectedMemberIds.includes(item.id);
-    return (
-      <TouchableOpacity
-        style={[styles.memberCard, isSelected && styles.memberCardSelected]}
-        onPress={() => toggleSelect(item.id)}>
-        <Text style={styles.memberName}>{item.name}</Text>
-        {item.phone ? (
-          <Text style={styles.memberPhone}>{item.phone}</Text>
-        ) : null}
-      </TouchableOpacity>
+  // 검색 로직
+  const filterMembers = members => {
+    if (!searchText) return members;
+    return members.filter(member =>
+      member.name.toLowerCase().includes(searchText.toLowerCase()),
     );
+  };
+
+  // 멤버 클릭 시 모달 열기
+  const onMemberPress = member => {
+    setSelectedMember(member);
+    setModalVisible(true);
+  };
+
+  // 모달에서 "추가" 선택
+  const onAddPress = () => {
+    console.log(`${selectedMember?.name} 추가`);
+    // 추가 로직 처리
+    setModalVisible(false);
+  };
+
+  // 모달에서 "제거" 선택
+  const onRemovePress = () => {
+    console.log(`${selectedMember?.name} 제거`);
+    // 제거 로직 처리
+    setModalVisible(false);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* 상단 헤더 (간단 예시) */}
-      {/* <View style={styles.header}>
-        <Text style={styles.headerTitle}>BLUE HEART</Text>
-      </View> */}
-
-      <View style={styles.contentWrapper}>
-        {/* 제목 & 총 멤버 수 */}
-        <Text style={styles.pageTitle}>
-          Activity Members {initialMembers.length}
-        </Text>
+      {/* 상단 텍스트 */}
+      <View style={styles.infoContainer}>
+        <Text style={styles.title}>Activity Members {joinMembers.length}</Text>
 
         {/* 검색 바 */}
-        <View style={styles.searchBarWrapper}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search members..."
-            value={searchText}
-            onChangeText={setSearchText}
-          />
-        </View>
-
-        {/* 멤버 그리드 (FlatList) */}
-        <FlatList
-          data={filteredMembers}
-          keyExtractor={item => item.id}
-          numColumns={3} // 한 줄에 3개씩
-          columnWrapperStyle={styles.columnWrapper}
-          renderItem={renderMemberCard}
-          style={{marginTop: 8, marginBottom: 80}} // Confirm 버튼 자리 확보
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search members"
+          value={searchText}
+          onChangeText={setSearchText}
         />
+
+        <ScrollView>
+          {/* Join Member 섹션 */}
+          <Text style={styles.sectionTitle}>Join Member</Text>
+
+          <View style={styles.memberContainer}>
+            {filterMembers(joinMembers).map((member, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.memberBox}
+                onPress={() => onMemberPress(member)}>
+                <Text style={styles.memberText}>
+                  {member.name} {member.id ? member.id : ''}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* 두 번째 섹션 (예시) */}
+          <View style={styles.memberContainer}>
+            {filterMembers(otherMembers).map((member, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.memberBox}
+                onPress={() => onMemberPress(member)}>
+                <Text style={styles.memberText}>
+                  {member.name} {member.id ? member.id : ''}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
       </View>
 
-      {/* 하단 Confirm 버튼 */}
-      <View style={styles.bottomContainer}>
-        <TouchableOpacity
-          style={styles.confirmButton}
-          onPress={handleConfirmSelection}>
-          <Text style={styles.confirmButtonText}>Confirm Selection</Text>
-        </TouchableOpacity>
-      </View>
+      {/* 멤버 선택 모달 */}
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}>
+        {/* 외부 터치 시 모달 닫기 */}
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            {/* 모달 내부 터치 시 모달 닫히지 않도록 빈 TouchableWithoutFeedback */}
+            <TouchableWithoutFeedback>
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalTitle}>
+                  {selectedMember?.name}를(을) 어떻게 하시겠습니까?
+                </Text>
+                <View style={styles.modalButtonGroup}>
+                  <TouchableOpacity
+                    style={[styles.modalButton, {backgroundColor: '#4CAF50'}]}
+                    onPress={onAddPress}>
+                    <Text style={styles.modalButtonText}>추가</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.modalButton, {backgroundColor: '#F44336'}]}
+                    onPress={onRemovePress}>
+                    <Text style={styles.modalButtonText}>제거</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </SafeAreaView>
   );
 }
 
-// -------------------- 스타일 --------------------
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#F7F8FA',
   },
-  // 상단 헤더
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 56,
+  infoContainer: {
     paddingHorizontal: 16,
-    backgroundColor: '#fff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    justifyContent: 'space-between',
+    marginTop: 16,
   },
-  headerTitle: {
-    fontSize: 18,
+  title: {
+    fontSize: 20,
     fontWeight: 'bold',
+    marginBottom: 8,
   },
-
-  // 메인 내용
-  contentWrapper: {
-    flex: 1,
-    padding: 16,
-  },
-  pageTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
-  },
-
-  // 검색 바
-  searchBarWrapper: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
+  searchBar: {
+    height: 40,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#ccc',
+    paddingHorizontal: 10,
+    marginBottom: 16,
+    borderRadius: 4,
   },
-  searchInput: {
+  sectionTitle: {
     fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
   },
-
-  // 그리드
-  columnWrapper: {
-    justifyContent: 'flex-start',
-    marginBottom: 10,
+  memberContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 24,
   },
-  memberCard: {
+  memberBox: {
+    width: '30%',
     backgroundColor: '#333',
-    width: (width - 48) / 3, // 패딩(16*2) + 간격 등을 고려해서 나눈 값
-    height: 80,
-    borderRadius: 8,
-    marginRight: 8,
+    margin: '1.5%',
+    borderRadius: 6,
+    paddingVertical: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  memberCardSelected: {
-    backgroundColor: '#000', // 선택 시 더 짙은 색
-  },
-  memberName: {
+  memberText: {
     color: '#fff',
-    fontWeight: '600',
-    marginBottom: 4,
     textAlign: 'center',
-  },
-  memberPhone: {
-    color: '#fff',
-    fontSize: 12,
-    textAlign: 'center',
-  },
-
-  // 하단 Confirm 버튼
-  bottomContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 80,
-    backgroundColor: '#fff',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#ddd',
   },
   confirmButton: {
-    flex: 1,
     backgroundColor: '#000',
-    borderRadius: 8,
+    paddingVertical: 12,
+    borderRadius: 6,
     alignItems: 'center',
-    justifyContent: 'center',
+    marginVertical: 16,
   },
   confirmButtonText: {
     color: '#fff',
+    fontWeight: 'bold',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)', // 배경을 어둡게 만듦
+    justifyContent: 'center', // 모달을 중앙에 배치
+    alignItems: 'center', // 모달을 중앙에 배치
+  },
+  modalContainer: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 20,
+    alignItems: 'center',
+    // 그림자 추가 (iOS와 Android)
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
     fontSize: 16,
+    marginBottom: 24,
+    textAlign: 'center',
+  },
+  modalButtonGroup: {
+    flexDirection: 'row',
+    // marginBottom: 16,
+    width: '100%',
+  },
+  modalButton: {
+    flex: 1,
+    marginHorizontal: 5,
+    paddingVertical: 10,
+    borderRadius: 4,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: '#fff',
     fontWeight: '600',
+  },
+  closeText: {
+    color: '#999',
+    marginTop: 8,
+    textDecorationLine: 'underline',
   },
 });

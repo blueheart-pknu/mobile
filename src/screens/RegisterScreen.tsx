@@ -11,12 +11,12 @@ import {
   Platform,
   ScrollView,
   Alert,
+  Dimensions,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
-// import Icon from 'react-native-vector-icons/MaterialIcons'; // 드롭다운 아이콘 추가
-import PersonIcon from '../assets/svg/link-icon.svg';
+import ArrowIcon from '../assets/svg/down-arrow-icon.svg';
 
 export default function RegisterScreen() {
   const navigation = useNavigation();
@@ -64,7 +64,8 @@ export default function RegisterScreen() {
     // 화면 뒤로 돌아가기 (또는 다른 화면으로 이동)
     navigation.goBack();
   };
-
+  const {width, height} = Dimensions.get('screen');
+  console.log('width: ', width, 'height: ', height);
   return (
     <SafeAreaView style={styles.container}>
       {/* 상단 헤더 (Back 버튼 + 제목) */}
@@ -138,6 +139,7 @@ export default function RegisterScreen() {
           {/* Status (드롭다운) */}
           <Text style={styles.label}>Status</Text>
           <View style={styles.pickerWrapper}>
+            {/* <View> */}
             <RNPickerSelect
               onValueChange={(value: 'Active' | 'Done' | 'Cancel') =>
                 setStatus(value)
@@ -147,15 +149,16 @@ export default function RegisterScreen() {
                 {label: 'Done', value: 'Done'},
                 {label: 'Cancel', value: 'Cancel'},
               ]}
-              // value={status}
+              useNativeAndroidPickerStyle={false}
+              fixAndroidTouchableBug={true}
+              value={status}
               style={pickerSelectStyles}
-              placeholder={{label: 'Select Status', value: null}}
-              // useNativeAndroidPickerStyle={false}
+              // placeholder={{label: 'Select Status', value: null}}
               touchableWrapperProps={{
                 style: {width: '100%'},
                 activeOpacity: 0.7, // 클릭 시 투명도 조절 등
               }}
-              Icon={() => <PersonIcon width={24} height={24} color="gray" />}
+              Icon={() => <ArrowIcon width={24} height={24} color="gray" />}
             />
           </View>
 
@@ -203,15 +206,16 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 56,
-    backgroundColor: '#fff',
+    marginTop: 16,
+    // height: 56,
+    // backgroundColor: '#fff',
     paddingHorizontal: 16,
-    borderBottomColor: '#ddd',
-    borderBottomWidth: 1,
+    // borderBottomColor: '#ddd',
+    // borderBottomWidth: 1,
   },
   backBtn: {
     paddingRight: 16,
-    paddingVertical: 8,
+    // paddingVertical: 8,
   },
   backBtnText: {
     fontSize: 18,
@@ -259,6 +263,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     height: 50,
     marginBottom: 16,
+    width: '100%',
   },
 
   // 버튼들
@@ -299,7 +304,7 @@ const pickerSelectStyles = StyleSheet.create({
     paddingHorizontal: 10,
     color: '#000',
 
-    paddingRight: 30, // 드롭다운 화살표 공간 확보
+    // paddingRight: 30, // 드롭다운 화살표 공간 확보
     // 전체 박스 터치 가능하도록 flex 설정
     flex: 1,
   },
