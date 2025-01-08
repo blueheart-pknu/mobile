@@ -88,14 +88,14 @@ export const ACTIVITIES_DATA = [
 
 // 더미 멤버 목록
 export const GROUP_MEMBERS = [
-  {id: '1', name: 'hyowchoi', phone: '123456789'},
-  {id: '2', name: 'daewoole'},
-  {id: '3', name: 'dongglee'},
-  {id: '4', name: 'eunbikim'},
-  {id: '5', name: 'gykoh'},
-  {id: '6', name: 'hyungnoh'},
-  {id: '7', name: 'inshin'},
-  {id: '8', name: 'jeekim'},
-  {id: '9', name: 'jihykim2'},
-  {id: '10', name: 'jimchoi'},
+  {id: '1', name: 'test1', phone: '123456789'},
+  {id: '2', name: 'test2'},
+  {id: '3', name: 'test3'},
+  {id: '4', name: 'test4'},
+  {id: '5', name: 'test5'},
+  {id: '6', name: 'test6'},
+  {id: '7', name: 'test7'},
+  {id: '8', name: 'test8'},
+  {id: '9', name: 'test9'},
+  {id: '10', name: 'test10'},
 ];

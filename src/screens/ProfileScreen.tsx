@@ -16,9 +16,10 @@ import DateIcon from '../assets/svg/calender-icon.svg';
 import PeopleIcon from '../assets/svg/people-icon.svg';
 import LinkIcon from '../assets/svg/link-icon.svg';
 import PeoplesIcon from '../assets/svg/peoples-icon.svg';
-import DefaultIcon from '../assets/svg/default-icon.svg';
+
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from './HomeScreen';
+import {renderMemberItem} from '../components/MemberUI';
 
 // Activity 타입
 export type Activity = {
@@ -108,23 +109,6 @@ const ProfileScreen = () => {
     );
   };
 
-  // 멤버 목록 렌더
-  const renderMemberItem = (member: Member) => {
-    return (
-      <View key={member.id} style={styles.memberContainer}>
-        {/* <View style={styles.memberAvatar} /> */}
-        <DefaultIcon width={50} height={50} style={styles.memberAvatar} />
-        {/* <Image
-          source={{uri: 'https://picsum.photos/200'}}
-          style={styles.memberAvatar}
-        /> */}
-
-        <Text style={styles.memberName}>{member.name}</Text>
-        {member.phone && <Text style={styles.memberPhone}>{member.phone}</Text>}
-      </View>
-    );
-  };
-
   return (
     <View style={styles.container}>
       <QuickActions />
@@ -195,7 +179,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F7F8FA',
     paddingTop: 20,
-    marginHorizontal: 16,
+    // marginHorizontal: 16,
+    paddingHorizontal: 16,
   },
   headerContainer: {
     flexDirection: 'row',
@@ -372,27 +357,6 @@ const styles = StyleSheet.create({
   membersGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-  },
-  memberContainer: {
-    width: '25%', // 4열 그리드 예시
-    alignItems: 'center',
-    marginVertical: 8,
-  },
-  memberAvatar: {
-    width: 50,
-    height: 50,
-    // backgroundColor: '#666',
-    borderRadius: 25,
-    marginBottom: 6,
-  },
-  memberName: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#333',
-  },
-  memberPhone: {
-    fontSize: 12,
-    color: '#888',
   },
 
   //   // Quick Actions
