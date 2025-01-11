@@ -1,9 +1,12 @@
 name: Build Ios Test
 
-on:
-  push:
-    - 'frontend/**'
-    # branches: [test/CICD-hojung] -> 특정 브랜치에 push될 때만 실행
+# 모든 브랜치에 push되었을때 실행
+on: push
+
+# on:
+#   push:
+# - 'frontend/**' -> frontend/**' 패턴에 매칭되는 모든 파일이 변경되었을때 실행
+# branches: [test/CICD-hojung] -> 특정 브랜치에 push될 때만 실행
 
 jobs:
   build:
