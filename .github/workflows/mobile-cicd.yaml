@@ -17,10 +17,11 @@ jobs:
       - name: Show self-hosted machine infomation
         run: uname -a
 
-      - name: Checkout repo from test/CICD-hojung branch # CI서버로 파일 복제
+      - name: 체크아웃 # CI서버로 파일 복제
         uses: actions/checkout@v4
-        with:
-          ref: test/CICD-hojung
+        # 특정 브랜치 복사할 때
+        # with:
+        #   ref: main
 
       - name: npm 설치
         run: npm install
