@@ -42,7 +42,7 @@ jobs:
           xcode-version: '15.3'
 
       - name: build check
-        run: xcodebuild -workspace ios/SampleApp.xcworkspace -scheme SampleApp -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=latest';
+        run: xcodebuild -workspace ios/blueheart.xcworkspace -scheme blueheart -destination 'platform=iOS Simulator,name=iPhone 15 Pro,OS=latest';
         # run: npm run ios
         # user:
 
