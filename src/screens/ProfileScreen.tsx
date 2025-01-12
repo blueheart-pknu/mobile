@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -33,7 +33,7 @@ export type Activity = {
 
 // Member(그룹 멤버) 타입
 export type Member = {
-  // id: number; -> BE에서 곧 줄거임
+  id: number; //-> BE에서 곧 줄거임
   studentNumber: string;
   role: string;
   username: string;
@@ -41,12 +41,17 @@ export type Member = {
 };
 
 function QuickActions() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <View style={styles.quickActionsContainer}>
       <Text style={styles.sectionTitle}>Quick Actions</Text>
       <View style={styles.quickActionsRow}>
         {/* View Members */}
-        <TouchableOpacity style={styles.actionCard} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => {
+            navigation.navigate('Member');
+          }}>
           <PeoplesIcon width={40} height={45} />
           <Text style={styles.actionText}>View Members</Text>
         </TouchableOpacity>
@@ -90,6 +95,10 @@ const ProfileScreen = () => {
       console.error('Error fetching members:', error);
     }
   };
+
+  useEffect(() => {
+    getGroupMeMembers();
+  }, []);
 
   const renderActivityItem: ListRenderItem<Activity> = ({item}) => {
     return (

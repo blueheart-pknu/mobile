@@ -18,6 +18,7 @@ export type RootStackParamList = {
   Profile: undefined;
   Register: undefined;
   Member: undefined;
+  Login: undefined;
 };
 
 export interface ActivatyProps {

@@ -12,9 +12,21 @@ import {
 } from 'react-native';
 import {renderMemberItem} from '../components/MemberUI';
 import {GROUP_MEMBERS} from '../constants/dummy';
+import {UserRole} from '../type/status';
+
+// role, 위치에 따라 다름
+// view members , user가 들어간 경우 -> 모든 멤버를 볼수 있음
+//      지금은 아무 기능 없음
+
+// role이 staff , admin
+//    group의 edit 버튼을 누르면 -> group의 edit 화면으로 이동 -> 수정 모달,
+
+// role이 staff , admin
+//      activity의 edit 버튼을 누르면 -> activity의 edit 화면으로 이동
 
 export default function ActivityMembersScreen() {
-  // 검색어 상태
+  // 검색어 상태 -> 이 부분은 나중에  jwt로 설정
+  const [role, setRole] = useState<UserRole>(UserRole.USER);
   const [searchText, setSearchText] = useState('');
 
   // 모달 제어 상태

@@ -1,9 +1,9 @@
-import axios from 'axios';
+import instance from './axios.instance';
 
-const instance = axios.create({
-  baseURL: 'http://localhost:8080',
-  withCredentials: true,
-});
+// const instance = axios.create({
+//   baseURL: 'http://localhost:8080',
+//   withCredentials: true,
+// });
 
 const testURL = '/api/v1/user/create';
 export const axiosTest = async (): Promise<any> => {
@@ -23,7 +23,6 @@ export const axiosTest = async (): Promise<any> => {
 const axiosGetAllActivityURL = '/api/v1/activity/all';
 export const axiosGetAllActivity = async () => {
   try {
-    console.log('axops');
     const response = await instance.get(axiosGetAllActivityURL);
     return response;
   } catch (error) {
@@ -81,3 +80,5 @@ export const axiosGetGroupMe = async (id: number) => {
     throw error;
   }
 };
+
+//

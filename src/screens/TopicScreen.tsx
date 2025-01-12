@@ -61,7 +61,7 @@ function TopicScreen() {
 
   useEffect(() => {
     getActivityDetail(id);
-  });
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F5F5F5'}}>
