@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -21,6 +21,7 @@ import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from './HomeScreen';
 import {renderMemberItem} from '../components/MemberUI';
 import {axiosGetGroupMe} from '../axios/axios';
+import {AuthContext} from '../hooks/AuthContext';
 
 // Activity 타입
 export type Activity = {
@@ -39,6 +40,8 @@ export type Member = {
   username: string;
   // phone?: string; // phone이 존재하지 않을 수도 있으므로 optional 처리
 };
+
+// 최소한 내 정보는 내가 가지고 있어야 함
 
 function QuickActions() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -73,6 +76,9 @@ const {width} = Dimensions.get('window');
 const ProfileScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [gruopMember, setGroupMember] = useState<Member[]>([]);
+  const {token} = useContext(AuthContext); // 전역 토큰 가져오기
+
+  console.log('token', token);
 
   // 스크롤 시 현재 페이지 index 업데이트
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -88,8 +94,10 @@ const ProfileScreen = () => {
   const getGroupMeMembers = async () => {
     try {
       const response = await axiosGetGroupMe();
+      console.log('group', response);
       if (response?.data?.data) {
         setGroupMember(response.data.data as Member[]);
+        // console.log('그룹내 멤버들', response.data.data);
       }
     } catch (error) {
       console.error('Error fetching members:', error);

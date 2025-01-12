@@ -7,7 +7,6 @@ const BASE_URL = 'http://localhost:8080';
 const instance = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
-  //   timeout: 5000,s
 });
 
 // Interceptor로 헤더에 JWT 토큰 자동 추가
@@ -17,7 +16,7 @@ instance.interceptors.request.use(
       const credentials = await Keychain.getGenericPassword(); // Keychain에서 JWT 가져오기
       if (credentials) {
         config.headers.Authorization = `Bearer ${credentials.password}`;
-        console.log('test', credentials.password);
+        // console.log('test', credentials.password);
       }
     } catch (error) {
       console.error('Error retrieving token:', error);

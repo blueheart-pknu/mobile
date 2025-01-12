@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {View, Text, TextInput, Button, StyleSheet, Alert} from 'react-native';
 import * as Keychain from 'react-native-keychain';
 import {RootStackParamList} from './HomeScreen';
@@ -17,6 +17,7 @@ function LoginScreen() {
     try {
       // Keychain에 JWT 토큰 저장
       await Keychain.setGenericPassword('accessToken', jwtToken);
+
       console.log('Token saved successfully:', jwtToken);
       Alert.alert('성공', '테스트 토큰이 저장되었습니다.');
       navigation.navigate('Home'); // 홈 화면으로 이동

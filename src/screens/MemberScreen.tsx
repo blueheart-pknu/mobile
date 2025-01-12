@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
 import {renderMemberItem} from '../components/MemberUI';
 import {GROUP_MEMBERS} from '../constants/dummy';
 import {UserRole} from '../type/status';
+import {AuthContext} from '../hooks/AuthContext';
 
 // role, 위치에 따라 다름
 // view members , user가 들어간 경우 -> 모든 멤버를 볼수 있음
@@ -28,6 +29,7 @@ export default function ActivityMembersScreen() {
   // 검색어 상태 -> 이 부분은 나중에  jwt로 설정
   const [role, setRole] = useState<UserRole>(UserRole.USER);
   const [searchText, setSearchText] = useState('');
+  const {token} = useContext(AuthContext); // 전역 토큰 가져오기
 
   // 모달 제어 상태
   const [modalVisible, setModalVisible] = useState(false);

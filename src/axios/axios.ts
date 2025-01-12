@@ -5,14 +5,25 @@ import instance from './axios.instance';
 //   withCredentials: true,
 // });
 
-const testURL = '/api/v1/user/create';
-export const axiosTest = async (): Promise<any> => {
+// const testURL = '/api/v1/user/create';
+// export const axiosTest = async (): Promise<any> => {
+//   try {
+//     const response = await instance.post(testURL, {
+//       username: '민영재',
+//       studentNumber: '202111741',
+//       role: 'USER',
+//     });
+//     return response;
+//   } catch (error) {
+//     throw error;
+//   }
+// };
+
+// User -> 유저 관련 api
+const axiosGetUserAllURL = '/api/v1/user/search/all';
+export const axiosGetUserAll = async () => {
   try {
-    const response = await instance.post(testURL, {
-      username: '민영재',
-      studentNumber: '202111741',
-      role: 'USER',
-    });
+    const response = await instance.get(axiosGetUserAllURL);
     return response;
   } catch (error) {
     throw error;
@@ -72,13 +83,11 @@ export const axiosGetAllMember = async () => {
 };
 
 const axiosGetGroupMeURL = '/api/v1/group/me';
-export const axiosGetGroupMe = async (id: number) => {
+export const axiosGetGroupMe = async () => {
   try {
-    const response = await instance.get(`${axiosGetGroupMeURL}/${id}`);
+    const response = await instance.get(axiosGetGroupMeURL);
     return response;
   } catch (error) {
     throw error;
   }
 };
-
-//
