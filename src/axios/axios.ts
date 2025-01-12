@@ -1,6 +1,6 @@
-import axis from 'axios';
+import axios from 'axios';
 
-const instance = axis.create({
+const instance = axios.create({
   baseURL: 'http://localhost:8080',
   withCredentials: true,
 });
@@ -13,6 +13,69 @@ export const axiosTest = async (): Promise<any> => {
       studentNumber: '202111741',
       role: 'USER',
     });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// HOME Screen
+const axiosGetAllActivityURL = '/api/v1/activity/all';
+export const axiosGetAllActivity = async () => {
+  try {
+    console.log('axops');
+    const response = await instance.get(axiosGetAllActivityURL);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetActivityDetailURL = '/api/v1/activity/detail';
+export const axiosGetActivityDetail = async (id: number) => {
+  try {
+    const response = await instance.get(`${axiosGetActivityDetailURL}/${id}`);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// HEADER Screen -> 알림 어떻게 해야함..? 소켓이 있나?
+// const axios
+
+// activity-history -> 활동 참여 기록
+const axiosSubscribeActivityURL = '/api/v1/activity-history/subscribe';
+export const axiosSubscribeActivity = async (
+  activityId: number,
+  userId: number,
+) => {
+  try {
+    const response = await instance.post(`${axiosSubscribeActivityURL}`, {
+      activityId,
+      userId,
+    });
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Group -> 그룹 관련 api
+const axiosGetAllMemberURL = '/api/v1/group/all';
+export const axiosGetAllMember = async () => {
+  try {
+    const response = await instance.get(axiosGetAllMemberURL);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const axiosGetGroupMeURL = '/api/v1/group/me';
+export const axiosGetGroupMe = async (id: number) => {
+  try {
+    const response = await instance.get(`${axiosGetGroupMeURL}/${id}`);
     return response;
   } catch (error) {
     throw error;

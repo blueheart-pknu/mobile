@@ -11,8 +11,10 @@ export const renderMemberItem = (
   const content = (
     <>
       <DefaultIcon width={50} height={50} style={styles.memberAvatar} />
-      <Text style={styles.memberName}>{member.name}</Text>
-      {member.phone && <Text style={styles.memberPhone}>{member.phone}</Text>}
+      <Text style={styles.memberName}>{member.username}</Text>
+      {member.studentNumber && (
+        <Text style={styles.memberPhone}>{member.studentNumber}</Text>
+      )}
     </>
   );
 

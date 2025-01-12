@@ -88,8 +88,8 @@ export function Header() {
       ]}>
       {/* 로고 부분 */}
       <View style={styles.headerLeft}>
-        {/* <TouchableOpacity onPress={() => navigation.navigate('Home')}> */}
-        <TouchableOpacity onPress={testAxios}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          {/* <TouchableOpacity onPress={testAxios}> */}
           <BlueHeartIcon width={40} height={40} style={styles.logo} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>BLUE HEART</Text>
@@ -165,8 +165,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 20,
+    height: 20,
     tintColor: '#333',
     resizeMode: 'contain',
   },
