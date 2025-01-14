@@ -31,7 +31,20 @@ export const axiosGetUserAll = async () => {
 };
 
 // HOME Screen
-const axiosGetAllActivityURL = '/api/v1/activity/all';
+//TODO: activity/DONE 일단 테스트 해둠
+const axiosGetActivityByStatusURL = '/api/v1/activity/DONE';
+export const axiosGetActivityByStatus = async () => {
+  try {
+    const response = await instance.get(axiosGetActivityByStatusURL);
+    console.log('response', response);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// HOME Screen
+const axiosGetAllActivityURL = '/api/v1/activity/PROGRESSING';
 export const axiosGetAllActivity = async () => {
   try {
     const response = await instance.get(axiosGetAllActivityURL);

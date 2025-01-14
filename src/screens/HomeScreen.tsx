@@ -9,7 +9,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {ActivityCard} from '../components/ActivityCard';
-import {axiosGetAllActivity} from '../axios/axios';
+import {axiosGetActivityByStatus, axiosGetAllActivity} from '../axios/axios';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -36,15 +36,21 @@ export interface ActivatyProps {
 
 function HomeScreen() {
   const [data, setData] = useState<ActivatyProps[] | null>(null);
+  const [history, setHistory] = useState<ActivatyProps[] | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const getActivitiesData = async () => {
     try {
       const response = await axiosGetAllActivity();
+      const historyResponse = await axiosGetActivityByStatus();
+      console.log('response', response);
+      console.log('historyResponse', historyResponse);
       if (response?.data?.data) {
         setData(response.data.data as ActivatyProps[]);
       }
-      console.log('response', response);
+      if (historyResponse?.data?.data) {
+        setHistory(historyResponse.data.data as ActivatyProps[]);
+      }
     } catch (error) {
       console.error('Error fetching activities:', error);
     } finally {
@@ -103,7 +109,21 @@ function HomeScreen() {
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.horizontalCardScroll}>
-          <Text style={{paddingHorizontal: 16}}>지난 활동들을 로드 중...</Text>
+          {history?.map(activity => (
+            <ActivityCard
+              key={activity.id}
+              id={activity.id}
+              title={activity.title}
+              description={activity.description}
+              status={activity.status}
+              isSubscribed={activity.isSubscribed}
+              currentNumber={activity.currentNumber}
+              maxNumber={activity.maxNumber}
+              expiredAt={activity.expiredAt}
+              imageUrl={activity.imageUrl}
+              place={activity.place}
+            />
+          ))}
         </ScrollView>
       </ScrollView>
     </SafeAreaView>

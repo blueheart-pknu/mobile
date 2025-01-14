@@ -39,9 +39,9 @@ export function ActivityCard({
           {/* <CircleChart percentage={currentNumber / maxNumber} /> */}
           <CircleChart currentNumber={currentNumber} maxNumber={maxNumber} />
         </View>
-
+        //TODO: 메인 화면에 DONE으로 불러온다고 판단하고 그렇게 설정함
         {/* 참여 상태 버튼 (Optional) -> 누르면 상세 화면으로 이동 */}
-        {!isSubscribed ? (
+        {status !== 'DONE' ? (
           <TouchableOpacity
             style={styles.participateButton}
             // onPress={(() => navigation.navigate('Topic'), {id})}>
@@ -53,7 +53,7 @@ export function ActivityCard({
             style={styles.participateButtonDisabled}
             // onPress={() => navigation.navigate('Topic')}
           >
-            <Text style={styles.participateButtonText}>Closed</Text>
+            <Text style={styles.participateButtonText}>종료된 활동</Text>
           </TouchableOpacity>
         )}
       </View>

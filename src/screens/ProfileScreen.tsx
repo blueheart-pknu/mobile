@@ -94,7 +94,6 @@ const ProfileScreen = () => {
   const getGroupMeMembers = async () => {
     try {
       const response = await axiosGetGroupMe();
-      console.log('group', response);
       if (response?.data?.data) {
         setGroupMember(response.data.data as Member[]);
         // console.log('그룹내 멤버들', response.data.data);
