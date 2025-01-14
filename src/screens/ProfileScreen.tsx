@@ -1,4 +1,4 @@
-import React, {act, useRef, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   Dimensions,
-  Image,
+  // Image,
   ListRenderItem,
   NativeScrollEvent,
   NativeSyntheticEvent,
@@ -20,6 +20,8 @@ import PeoplesIcon from '../assets/svg/peoples-icon.svg';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {RootStackParamList} from './HomeScreen';
 import {renderMemberItem} from '../components/MemberUI';
+import {axiosGetGroupMe} from '../axios/axios';
+import {AuthContext} from '../hooks/AuthContext';
 
 // Activity 타입
 export type Activity = {
@@ -32,18 +34,27 @@ export type Activity = {
 
 // Member(그룹 멤버) 타입
 export type Member = {
-  id: string;
-  name: string;
-  phone?: string; // phone이 존재하지 않을 수도 있으므로 optional 처리
+  id: number; //-> BE에서 곧 줄거임
+  studentNumber: string;
+  role: string;
+  username: string;
+  // phone?: string; // phone이 존재하지 않을 수도 있으므로 optional 처리
 };
 
+// 최소한 내 정보는 내가 가지고 있어야 함
+
 function QuickActions() {
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   return (
     <View style={styles.quickActionsContainer}>
       <Text style={styles.sectionTitle}>Quick Actions</Text>
       <View style={styles.quickActionsRow}>
         {/* View Members */}
-        <TouchableOpacity style={styles.actionCard} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.actionCard}
+          onPress={() => {
+            navigation.navigate('Member');
+          }}>
           <PeoplesIcon width={40} height={45} />
           <Text style={styles.actionText}>View Members</Text>
         </TouchableOpacity>
@@ -64,7 +75,10 @@ const {width} = Dimensions.get('window');
 
 const ProfileScreen = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const flatListRef = useRef(null);
+  const [gruopMember, setGroupMember] = useState<Member[]>([]);
+  const {token} = useContext(AuthContext); // 전역 토큰 가져오기
+
+  console.log('token', token);
 
   // 스크롤 시 현재 페이지 index 업데이트
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -75,6 +89,23 @@ const ProfileScreen = () => {
 
   // 개별 Activity card
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
+  // jwt 로직 검증 후
+  const getGroupMeMembers = async () => {
+    try {
+      const response = await axiosGetGroupMe();
+      if (response?.data?.data) {
+        setGroupMember(response.data.data as Member[]);
+        // console.log('그룹내 멤버들', response.data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching members:', error);
+    }
+  };
+
+  useEffect(() => {
+    getGroupMeMembers();
+  }, []);
 
   const renderActivityItem: ListRenderItem<Activity> = ({item}) => {
     return (
@@ -165,7 +196,7 @@ const ProfileScreen = () => {
 
         {/* 그리드 형태로 멤버 표시 (flexWrap 사용) */}
         <View style={styles.membersGrid}>
-          {GROUP_MEMBERS.map(member => renderMemberItem(member))}
+          {gruopMember.map(member => renderMemberItem(member))}
         </View>
       </View>
     </View>

@@ -1638,6 +1638,27 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNKeychain (9.2.2):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - RNReanimated (3.16.6):
     - DoubleConversion
     - glog
@@ -1906,6 +1927,7 @@ DEPENDENCIES:
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNKeychain (from `../node_modules/react-native-keychain`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -2050,6 +2072,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNKeychain:
+    :path: "../node_modules/react-native-keychain"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -2128,6 +2152,7 @@ SPEC CHECKSUMS:
   RNCPicker: b38333672004badbea06689e92955635869b746c
   RNDateTimePicker: 9ec036a62ad0f5a2d04c1c7829338e87b4e423e7
   RNGestureHandler: e1dcb274c17ca0680a04d7ff357e35e37c384185
+  RNKeychain: 2c8ed1dc7a077aa51869fbd8f9114754e03837d9
   RNReanimated: ee9a749b8f2ee2a743d2dd7b4ab66f22d63f3bda
   RNScreens: 351f431ef2a042a1887d4d90e1c1024b8ae9d123
   RNSVG: 588c85abb474f7ee58dd886ed1fe198cc73772b2

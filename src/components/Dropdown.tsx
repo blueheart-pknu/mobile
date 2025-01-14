@@ -53,9 +53,9 @@ export function DropDown({style, onClose}: NotificationsDropdownProps) {
 
   return (
     <View style={[styles.container, style]}>
-      {/* <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+      <TouchableOpacity style={styles.closeButton} onPress={onClose}>
         <Text style={{color: '#999'}}>닫기</Text>
-      </TouchableOpacity> */}
+      </TouchableOpacity>
 
       <ScrollView>
         {sortedNotifications.map(notification => {

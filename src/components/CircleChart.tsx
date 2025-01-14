@@ -1,8 +1,19 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import CircularProgress from 'react-native-circular-progress-indicator';
 
-export function CircleChart({percentage}: {percentage: number}) {
+export function CircleChart({
+  currentNumber,
+  maxNumber,
+}: {
+  currentNumber: number;
+  maxNumber: number;
+}) {
+  const percentage = (currentNumber / maxNumber) * 100;
+
+  console.log('currentNumber', currentNumber);
+  console.log('maxNumber', maxNumber);
+  console.log('percentage', percentage);
   return (
     <View style={styles.container}>
       <CircularProgress

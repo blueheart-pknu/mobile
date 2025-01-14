@@ -3,80 +3,57 @@ import React from 'react';
 import {Text, View, Image, TouchableOpacity, StyleSheet} from 'react-native';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import {CircleChart} from '../components/CircleChart';
-import {RootStackParamList} from '../screens/HomeScreen';
+import {ActivatyProps, RootStackParamList} from '../screens/HomeScreen';
 import BG_1 from '../assets/png/dummy-bg1.png';
+import {formatDateDiff} from '../utils/data';
 
 export function ActivityCard({
+  id,
   title,
-  dateText,
-  progressRatio,
-  maxParticipants,
-  currentParticipants,
-  statusText,
+  description, // 빠짐
+  status,
+  isSubscribed,
+  currentNumber,
+  maxNumber,
+  expiredAt,
   imageUrl,
-  location,
-}: {
-  title: string;
-  dateText: string;
-  progressRatio: number; // 0~1 사이
-  maxParticipants: number;
-  currentParticipants: number;
-  statusText?: string;
-  imageUrl: undefined; // 타입 지정 뭐라고 하지?
-  location: string;
-}) {
+  place,
+}: ActivatyProps) {
   // 홈 화면에서 카드 클릭 시 이동 가능하도록
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  console.log(' card maxNumber', maxNumber);
 
   return (
     <View style={styles.cardContainer}>
       {/* 상단 이미지 */}
-      {/* <Image source={{uri: imageUrl}} style={styles.cardImage} /> */}
-      {/* <Image source={BG_1} style={styles.cardImage} /> */}
-      <Image source={imageUrl} style={styles.cardImage} />
+      <Image source={imageUrl || BG_1} style={styles.cardImage} />
 
       {/* 활동 정보 */}
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle}>{title}</Text>
         <View style={styles.subInfoContainer}>
           <View>
-            <Text style={styles.cardSubTitle}>{dateText}</Text>
-            <Text style={styles.cardSubTitle}>{location}</Text>
+            <Text style={styles.cardSubTitle}>{formatDateDiff(expiredAt)}</Text>
+            <Text style={styles.cardSubTitle}>{place || 'BE 곧 들어옴'}</Text>
           </View>
-          <CircleChart percentage={50} />
+          {/* <CircleChart percentage={currentNumber / maxNumber} /> */}
+          <CircleChart currentNumber={currentNumber} maxNumber={maxNumber} />
         </View>
-        <>
-          {/* 간단한 Progress Bar */}
-          {/* ProfressBar components */}
-          {/* <View style={styles.progressBarContainer}>
-          <View
-            style={[
-              styles.progressBarFill,
-              {
-                width: `${(progressRatio * 100).toFixed(
-                  0,
-                )}%` as unknown as number,
-              },
-            ]}
-          />
-        </View>
-        <Text style={styles.participantsText}>
-          {currentParticipants}/{maxParticipants}
-        </Text> */}
-        </>
+        //TODO: 메인 화면에 DONE으로 불러온다고 판단하고 그렇게 설정함
         {/* 참여 상태 버튼 (Optional) -> 누르면 상세 화면으로 이동 */}
-        {statusText ? (
+        {status !== 'DONE' ? (
           <TouchableOpacity
             style={styles.participateButton}
-            onPress={() => navigation.navigate('Topic')}>
-            <Text style={styles.participateButtonText}>{statusText}</Text>
+            // onPress={(() => navigation.navigate('Topic'), {id})}>
+            onPress={() => navigation.navigate('Topic', {id})}>
+            <Text style={styles.participateButtonText}>활동 보러 가기</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
             style={styles.participateButtonDisabled}
             // onPress={() => navigation.navigate('Topic')}
           >
-            <Text style={styles.participateButtonText}>Closed</Text>
+            <Text style={styles.participateButtonText}>종료된 활동</Text>
           </TouchableOpacity>
         )}
       </View>

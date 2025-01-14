@@ -2,7 +2,14 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-export function ProgressBar({percentage}: {percentage: number}) {
+export function ProgressBar({
+  currentNumber,
+  maxNumber,
+}: {
+  currentNumber: number;
+  maxNumber: number;
+}) {
+  const percentage = (currentNumber / maxNumber) * 100;
   return (
     <>
       {/* 진행률 & 남은 기간 */}

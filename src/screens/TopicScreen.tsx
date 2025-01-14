@@ -1,5 +1,5 @@
 // screens/TopicScreen.tsx
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   Text,
@@ -9,14 +9,59 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {ProgressBar} from '../components/ProgressBar';
 import LocationIcon from '../assets/svg/location-icon.svg';
 import DateIcon from '../assets/svg/calender-icon.svg';
+import {RootStackParamList} from './HomeScreen';
+import {axiosGetActivityDetail, axiosSubscribeActivity} from '../axios/axios';
+import {ActivityStatus} from '../type/status';
+import {formatDateDiff} from '../utils/data';
+
+type TopicScreenRouteProp = RouteProp<RootStackParamList, 'Topic'>;
+
+export interface ActivityDetailProps {
+  id: number; // 활동 ID
+  title: string; // 제목
+  description: string; // 설명
+  status: ActivityStatus;
+  isSubscribed: boolean; // 사용자가 참여했는지 여부
+  currentNumber: number; // 현재 참가자 수
+  maxNumber: number | null; // 최대 참가자 수 (null일 수 있음)
+  expiredAt: string; // 만료 시간 (ISO 형식의 문자열)
+  place: string; // 장소명
+  placeUrl: string; // 장소 URL
+}
 
 function TopicScreen() {
-  const navigation = useNavigation();
-  const [percentage, setPercentage] = React.useState(87);
+  const route = useRoute<TopicScreenRouteProp>();
+  const {id} = route.params; // 받은 id 파라미터
+  const [data, setData] = useState<ActivityDetailProps>();
+
+  const getActivityDetail = async (id: number) => {
+    try {
+      const response = await axiosGetActivityDetail(id);
+      console.log('response', response.data.data);
+      setData(response.data.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // 나중에 JWT 토큰으로 userId 받아오기
+  const postActivitySubscribe = async (id: number) => {
+    try {
+      const response = await axiosSubscribeActivity(id, userId);
+      console.log('response', response.data.data);
+      Alert.alert('참여 완료!');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getActivityDetail(id);
+  }, []);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#F5F5F5'}}>
@@ -24,24 +69,26 @@ function TopicScreen() {
 
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <Text style={styles.headerText}>Staff name</Text>
-        <Text style={styles.title}>Support Victims of Natural Disaster</Text>
+        <Text style={styles.title}>{data?.title}</Text>
 
         {/* 장소, 날짜 등 간단 표시 */}
         <View style={styles.infoRow}>
           <LocationIcon width={20} height={20} style={styles.logo} />
-          <Text style={styles.infoLabel}>장소</Text>
+          <Text style={styles.infoLabel}>{data?.place}</Text>
           <DateIcon width={18} height={18} style={styles.logo} />
-          <Text style={styles.infoLabel}>날짜</Text>
+          <Text style={styles.infoLabel}>
+            {formatDateDiff(data?.expiredAt)}
+          </Text>
         </View>
 
-        <ProgressBar percentage={percentage} />
+        <ProgressBar
+          currentNumber={data?.currentNumber}
+          maxNumber={data?.maxNumber}
+        />
 
         {/* 본문 내용 */}
         <Text style={styles.description}>
-          Once upon a time, in a quiet little town, there was a small bakery
-          famous for its delicious apple pies. Every morning, the aroma of
-          freshly baked goods filled the air, drawing people from all around.
-          The baker, Mr. Thomas, was known not only for his skills but also for
+          {data?.description || 'No description available'}
         </Text>
       </ScrollView>
 
@@ -49,8 +96,9 @@ function TopicScreen() {
       <View style={styles.bottomContainer}>
         <TouchableOpacity
           style={styles.donateButton}
-          onPress={() => Alert.alert('Donation Flow')}>
-          <Text style={styles.donateButtonText}>Donate Now</Text>
+          // onPress={() => Alert.alert('Donation Flow')}
+        >
+          <Text style={styles.donateButtonText}>참여하기</Text>
         </TouchableOpacity>
         <Text style={styles.secureText}>오늘의 Staff는 Yeomin 입니다~!</Text>
       </View>

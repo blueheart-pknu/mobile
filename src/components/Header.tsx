@@ -18,6 +18,7 @@ import BlueHeartIcon from '../assets/svg/blue-heart-icon.svg';
 import {DropDown} from './Dropdown';
 import Profile from '../assets/png/dummy_1.png';
 import {useSafeAreaInsets} from 'react-native-safe-area-context'; // 추가
+import {axiosTest} from '../axios/axios';
 
 export function Header() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -69,6 +70,15 @@ export function Header() {
     }
   };
 
+  const testAxios = async () => {
+    try {
+      const response = await axiosTest();
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     // paddingTop: insets.top을 줘서 상태 표시줄과 겹치지 않게
     <View
@@ -79,6 +89,7 @@ export function Header() {
       {/* 로고 부분 */}
       <View style={styles.headerLeft}>
         <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          {/* <TouchableOpacity onPress={testAxios}> */}
           <BlueHeartIcon width={40} height={40} style={styles.logo} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>BLUE HEART</Text>
@@ -154,8 +165,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    width: 24,
-    height: 24,
+    width: 20,
+    height: 20,
     tintColor: '#333',
     resizeMode: 'contain',
   },
